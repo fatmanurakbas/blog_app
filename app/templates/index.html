@@ -3,9 +3,25 @@
 {% block title %}Anasayfa - Portföyüm{% endblock %}
 
 {% block content %}
-<div class="text-center py-5">
-  <h1 class="display-4">Portföyüme Hoşgeldiniz</h1>
-  <p class="lead">Web uygulamaları, backend sistemleri ve yapay zeka projeleri geliştirmeye tutkulu bir yazılım geliştiricisiyim.</p>
-  <a href="{{ url_for('projects') }}" class="btn btn-primary btn-lg mt-3">Projelerime Göz Atın</a>
-</div>
+{# Backend'den 'hero' değişkeni gönderilmiş mi diye kontrol et #}
+{% if hero %}
+  {# Hero modelinde background_image_url alanı olduğu için onu da kullanalım #}
+  <div class="text-center py-5" style="background-image: url('{{ hero.background_image_url }}'); background-size: cover; background-position: center; border-radius: 10px; color: white; text-shadow: 2px 2px 4px #000000;">
+    
+    {# Veritabanından gelen başlığı yazdır #}
+    <h1 class="display-4">{{ hero.title }}</h1>
+    
+    {# Veritabanından gelen açıklamayı yazdır #}
+    <p class="lead">{{ hero.description }}</p>
+    
+    <a href="{{ url_for('main.projects') }}" class="btn btn-primary btn-lg mt-3">Projelerime Göz Atın</a>
+  </div>
+{% else %}
+  {# Eğer veritabanında hiç hero verisi yoksa bu varsayılan bölüm gösterilir #}
+  <div class="text-center py-5">
+    <h1 class="display-4">Portföyüme Hoşgeldiniz</h1>
+    <p class="lead">Web uygulamaları, backend sistemleri ve yapay zeka projeleri geliştirmeye tutkulu bir yazılım geliştiricisiyim.</p>
+    <a href="{{ url_for('main.projects') }}" class="btn btn-primary btn-lg mt-3">Projelerime Göz Atın</a>
+  </div>
+{% endif %}
 {% endblock %}

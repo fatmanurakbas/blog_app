@@ -1,6 +1,13 @@
-#models.py
-from app import db
+# app/models.py
+
+# YENİ BİR NESNE OLUŞTURMAK YERİNE, __init__.py'DEKİ MEVCUT NESNEYİ İÇERİ AKTARIN
+from app import db 
 from datetime import datetime
+
+# BU SATIRI SİLİN:
+# from flask_sqlalchemy import SQLAlchemy
+# BU SATIRI DA SİLİN:
+# db = SQLAlchemy()
 
 class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -18,10 +25,6 @@ class Post(db.Model):
 
     def __repr__(self):
         return f"<Post {self.title}>"
-    
-from flask_sqlalchemy import SQLAlchemy
-
-db = SQLAlchemy()
 
 class Hero(db.Model):
     __tablename__ = 'Hero'
@@ -37,7 +40,7 @@ class Hero(db.Model):
 class About(db.Model):
     __tablename__ = 'About'
     id = db.Column(db.Integer, primary_key=True)
-    bio = db.Column(db.Text)  # NVARCHAR(MAX) için Text tipi uygun
+    bio = db.Column(db.Text)
     profile_image_url = db.Column(db.String(250))
 
     def __repr__(self):
@@ -81,7 +84,7 @@ class Skills(db.Model):
     __tablename__ = 'Skills'
     id = db.Column(db.Integer, primary_key=True)
     skill_name = db.Column(db.String(100))
-    level = db.Column(db.String(50))  # Örnek: Başlangıç, Orta, İleri, Uzman
+    level = db.Column(db.String(50))
 
     def __repr__(self):
         return f'<Skill {self.skill_name} - {self.level}>'
@@ -97,3 +100,14 @@ class Reference(db.Model):
 
     def __repr__(self):
         return f'<Reference {self.full_name} - {self.company}>'
+    
+class ContactMessage(db.Model):
+    __tablename__ = 'ContactMessage'
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(150), nullable=False)
+    email = db.Column(db.String(150), nullable=False)
+    message = db.Column(db.Text, nullable=False)
+    date_sent = db.Column(db.DateTime, default=datetime.utcnow)
+
+    def __repr__(self):
+        return f'<ContactMessage from {self.name}>'    

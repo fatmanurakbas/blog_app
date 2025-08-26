@@ -7,39 +7,28 @@
   <h2 class="mb-4 text-center">Referanslarım</h2>
   <div class="row">
     
+    {# Backend'den gelen 'reference_list' üzerinde döngü başlat #}
+    {% for ref in reference_list %}
     <div class="col-md-6 col-lg-4 mb-4">
       <div class="card h-100 shadow-sm">
-        <img src="/static/images/Ahmetcan.jpg" class="card-img-top" alt="Ali Veli">
+        <img src="{{ ref.image_url }}" class="card-img-top" alt="{{ ref.full_name }}">
         <div class="card-body">
-          <h5 class="card-title">Ahmet Can Sönmez</h5>
-          <h6 class="card-subtitle mb-2 text-muted">Yazılım Müdürü - TechSoft</h6>
-          <p class="card-text">"Projelerde gösterdiği başarı ve ekip uyumu muazzamdı."</p>
+          <h5 class="card-title">{{ ref.full_name }}</h5>
+          <h6 class="card-subtitle mb-2 text-muted">{{ ref.role }} - {{ ref.company }}</h6>
+          <p class="card-text">"{{ ref.testimonial }}"</p>
         </div>
       </div>
     </div>
 
-    <div class="col-md-6 col-lg-4 mb-4">
-      <div class="card h-100 shadow-sm">
-        <img src="/static/images/ayse.jpg" class="card-img-top" alt="Ayşe Yılmaz">
-        <div class="card-body">
-          <h5 class="card-title">Ayşe Yılmaz</h5>
-          <h6 class="card-subtitle mb-2 text-muted">Proje Yöneticisi - Bilişim A.Ş.</h6>
-          <p class="card-text">"Tüm süreçlerde güvenle çalıştığımız biri oldu."</p>
-        </div>
+    {# Eğer 'reference_list' boş ise bu mesajı göster #}
+    {% else %}
+    <div class="col-12">
+      <div class="alert alert-info">
+        Henüz gösterilecek bir referans bulunmuyor.
       </div>
     </div>
-
-    <div class="col-md-6 col-lg-4 mb-4">
-      <div class="card h-100 shadow-sm">
-        <img src="/static/images/Mehmetkaya.jpg" class="card-img-top" alt="Murat Kaya">
-        <div class="card-body">
-          <h5 class="card-title">Mehmet Kaya</h5>
-          <h6 class="card-subtitle mb-2 text-muted">CTO - Kodla Bilişim</h6>
-          <p class="card-text">"Teknik bilgisi ve sorumluluk bilinci gerçekten etkileyici."</p>
-        </div>
-      </div>
-    </div>
+    {% endfor %}
 
   </div>
 </div>
-{% endblock %}
+{% endblock %}```

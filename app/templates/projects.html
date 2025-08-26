@@ -6,38 +6,33 @@
 <h2 class="mb-4">Projelerim</h2>
 
 <div class="row">
-  <!-- Proje kartları -->
+  
+  {# Backend'den gelen 'project_list' listesi üzerinde döngü başlat #}
+  {# Her bir öğeye 'project' adını veriyoruz #}
+  {% for project in project_list %}
   <div class="col-md-4 mb-4">
     <div class="card h-100 shadow-sm">
-      <img src="{{ url_for('static', filename='images/Local.png') }}" class="card-img-top" alt="Proje 1">
-      <div class="card-body">
-        <h5 class="card-title">E-Ticaret Web Sitesi</h5>
-        <p class="card-text">Modern teknolojilerle geliştirilmiş, kullanıcı dostu ve güvenli bir e-ticaret platformu.</p>
-        <a href="https://example.com/e-ticaret" class="btn btn-primary" target="_blank">Detayları Gör</a>
+      <img src="{{ project.image_url }}" class="card-img-top" alt="{{ project.title }}">
+      
+      {# Kart içeriklerinin aynı hizada olması için d-flex kullandık #}
+      <div class="card-body d-flex flex-column">
+        <h5 class="card-title">{{ project.title }}</h5>
+        <p class="card-text">{{ project.description }}</p>
+        
+        {# mt-auto butonu kartın en altına iter #}
+        <a href="{{ project.project_url }}" class="btn btn-primary mt-auto" target="_blank">Detayları Gör</a>
       </div>
     </div>
   </div>
 
-  <div class="col-md-4 mb-4">
-    <div class="card h-100 shadow-sm">
-      <img src="{{ url_for('static', filename='images/Kombin.png') }}" class="card-img-top" alt="Proje 2">
-      <div class="card-body">
-        <h5 class="card-title">Blog Platformu</h5>
-        <p class="card-text">Kullanıcıların kolayca blog yazıları oluşturabildiği, kategorilendirme ve etiketleme özellikleri bulunan platform.</p>
-        <a href="https://example.com/blog-platformu" class="btn btn-primary" target="_blank">Detayları Gör</a>
-      </div>
+  {# Eğer 'project_list' boş ise (hiç proje yoksa) bu mesajı göster #}
+  {% else %}
+  <div class="col-12">
+    <div class="alert alert-info">
+      Henüz gösterilecek bir proje bulunmuyor.
     </div>
   </div>
-
-  <div class="col-md-4 mb-4">
-    <div class="card h-100 shadow-sm">
-      <img src="{{ url_for('static', filename='images/FeelArt.png') }}" class="card-img-top" alt="Proje 3">
-      <div class="card-body">
-        <h5 class="card-title">Veri Analiz Aracı</h5>
-        <p class="card-text">Büyük veri setlerini analiz eden, raporlama ve görselleştirme imkanı sunan web tabanlı araç.</p>
-        <a href="https://example.com/veri-analiz" class="btn btn-primary" target="_blank">Detayları Gör</a>
-      </div>
-    </div>
-  </div>
+  {% endfor %}
+  
 </div>
 {% endblock %}

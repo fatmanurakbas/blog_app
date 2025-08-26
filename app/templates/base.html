@@ -14,20 +14,22 @@
   <!-- Navbar -->
   <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
     <div class="container">
-      <a class="navbar-brand" href="{{ url_for('home') }}">My Portfolio</a>
+      <!-- DEĞİŞİKLİK 1: 'home' -> 'main.index' oldu -->
+      <a class="navbar-brand" href="{{ url_for('main.index') }}">My Portfolio</a>
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
         <span class="navbar-toggler-icon"></span>
       </button>
       <div class="collapse navbar-collapse" id="navbarNav">
         <ul class="navbar-nav ms-auto">
-          <li class="nav-item"><a class="nav-link" href="{{ url_for('home') }}">Anasayfa</a></li>
-          <li class="nav-item"><a class="nav-link" href="{{ url_for('about') }}">Hakkımda</a></li>
-          <li class="nav-item"><a class="nav-link" href="{{ url_for('projects') }}">Projeler</a></li>
-          <li class="nav-item"><a class="nav-link" href="{{ url_for('blogs') }}">Blog</a></li>
-          <li class="nav-item"><a class="nav-link" href="{{ url_for('skills') }}">Yetenekler</a></li>
-          <li class="nav-item"><a class="nav-link" href="{{ url_for('experiences') }}">Deneyimlerim</a></li>
-          <li class="nav-item"><a class="nav-link" href="{{ url_for('references') }}">Referans</a></li>
-          <li class="nav-item"><a class="nav-link" href="{{ url_for('contact') }}">İletişim</a></li>
+          <!-- DEĞİŞİKLİK 2: Tüm linklerin başına 'main.' eklendi -->
+          <li class="nav-item"><a class="nav-link" href="{{ url_for('main.index') }}">Anasayfa</a></li>
+          <li class="nav-item"><a class="nav-link" href="{{ url_for('main.about') }}">Hakkımda</a></li>
+          <li class="nav-item"><a class="nav-link" href="{{ url_for('main.projects') }}">Projeler</a></li>
+          <li class="nav-item"><a class="nav-link" href="{{ url_for('main.blogs') }}">Blog</a></li>
+          <li class="nav-item"><a class="nav-link" href="{{ url_for('main.skills') }}">Yetenekler</a></li>
+          <li class="nav-item"><a class="nav-link" href="{{ url_for('main.experiences') }}">Deneyimlerim</a></li>
+          <li class="nav-item"><a class="nav-link" href="{{ url_for('main.references') }}">Referans</a></li>
+          <li class="nav-item"><a class="nav-link" href="{{ url_for('main.contact') }}">İletişim</a></li>
         </ul>
       </div>
     </div>
@@ -35,21 +37,31 @@
 
   <!-- Page Content -->
   <div class="container mt-4">
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        {% for category, message in messages %}
+          <div class="alert alert-{{ category }}">
+            {{ message }}
+          </div>
+        {% endfor %}
+      {% endif %}
+    {% endwith %}
+
     {% block content %}{% endblock %}
   </div>
 
   <!-- Footer -->
-<footer class="bg-dark text-light mt-5 py-4">
-  <div class="container text-center">
-    <p class="mb-1">&copy; {{ current_year }} Benim Portföyüm. Tüm hakları saklıdır.</p>
-    <div>
-      <a href="https://github.com/kullaniciadiniz" class="text-light me-3" target="_blank"><i class="fab fa-github"></i> GitHub</a>
-      <a href="https://linkedin.com/in/kullaniciadiniz" class="text-light me-3" target="_blank"><i class="fab fa-linkedin"></i> LinkedIn</a>
-      <a href="mailto:mail@ornek.com" class="text-light"><i class="fas fa-envelope"></i> E-posta</a>
+  <footer class="bg-dark text-light mt-5 py-4">
+    <div class="container text-center">
+      <!-- Not: current_year değişkenini de bir ara backend'den gönderebiliriz -->
+      <p class="mb-1">&copy; 2025 Benim Portföyüm. Tüm hakları saklıdır.</p>
+      <div>
+        <a href="https://github.com/kullaniciadiniz" class="text-light me-3" target="_blank"><i class="fab fa-github"></i> GitHub</a>
+        <a href="https://linkedin.com/in/kullaniciadiniz" class="text-light me-3" target="_blank"><i class="fab fa-linkedin"></i> LinkedIn</a>
+        <a href="mailto:mail@ornek.com" class="text-light"><i class="fas fa-envelope"></i> E-posta</a>
+      </div>
     </div>
-  </div>
-</footer>
-
+  </footer>
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
   <script src="{{ url_for('static', filename='js/script.js') }}"></script>

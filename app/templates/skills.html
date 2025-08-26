@@ -6,38 +6,38 @@
 <div class="container py-5">
   <h2 class="mb-4 text-center">Yeteneklerim</h2>
   <div class="row">
-    <div class="col-md-6 mb-3">
-      <div class="p-3 border rounded bg-light">
-        <strong>Python</strong>
-        <div class="progress mt-1">
-          <div class="progress-bar bg-success" style="width: 90%;">Uzman</div>
+
+    {% set level_styles = {
+        'Uzman':     {'width': '95%', 'class': 'bg-success'},
+        'İleri':      {'width': '85%', 'class': 'bg-info'},
+        'Orta':       {'width': '70%', 'class': 'bg-warning'},
+        'Başlangıç':  {'width': '50%', 'class': 'bg-danger'}
+    } %}
+
+    {% for skill in skill_list %}
+    <div class="col-md-6 mb-4">
+      <div class="p-4 border rounded shadow-sm bg-white h-100">
+        <div class="d-flex justify-content-between mb-2">
+          <strong>{{ skill.skill_name }}</strong>
+          <span class="text-muted">{{ skill.level }}</span>
+        </div>
+        {% set style = level_styles.get(skill.level, {'width': '60%', 'class': 'bg-secondary'}) %}
+        <div class="progress" style="height: 22px; border-radius: 12px; overflow: hidden;">
+          <div class="progress-bar progress-bar-striped progress-bar-animated {{ style.class }}" 
+               role="progressbar" 
+               style="width: {{ style.width }}; font-size: 0.9rem;">
+            {{ style.width }}
+          </div>
         </div>
       </div>
     </div>
-    <div class="col-md-6 mb-3">
-      <div class="p-3 border rounded bg-light">
-        <strong>Flask</strong>
-        <div class="progress mt-1">
-          <div class="progress-bar bg-info" style="width: 85%;">İleri</div>
-        </div>
+    {% else %}
+    <div class="col-12">
+      <div class="alert alert-info text-center">
+        Henüz gösterilecek bir yetenek bulunmuyor.
       </div>
     </div>
-    <div class="col-md-6 mb-3">
-      <div class="p-3 border rounded bg-light">
-        <strong>HTML / CSS / Bootstrap</strong>
-        <div class="progress mt-1">
-          <div class="progress-bar bg-warning" style="width: 80%;">İleri</div>
-        </div>
-      </div>
-    </div>
-    <div class="col-md-6 mb-3">
-      <div class="p-3 border rounded bg-light">
-        <strong>SQL / PostgreSQL</strong>
-        <div class="progress mt-1">
-          <div class="progress-bar bg-danger" style="width: 75%;">Orta</div>
-        </div>
-      </div>
-    </div>
+    {% endfor %}
   </div>
 </div>
 {% endblock %}

@@ -7,22 +7,27 @@
 
 <p>Bana ulaşmak için aşağıdaki formu doldurabilirsiniz. En kısa sürede size geri döneceğim.</p>
 
-<form method="POST" action="/contact" class="mt-4">
+<!-- action'ı boş bırakabiliriz, aynı sayfaya post eder -->
+<form method="POST" action="" class="mt-4">
+  
+  <!-- Bu satır CSRF koruması için ZORUNLUDUR -->
+  {{ form.hidden_tag() }}
+
   <div class="mb-3">
-    <label for="name" class="form-label">Adınız Soyadınız</label>
-    <input type="text" class="form-control" id="name" name="name" placeholder="Adınızı yazın" required>
+    {{ form.name.label(class="form-label") }}
+    {{ form.name(class="form-control", placeholder="Adınızı yazın") }}
   </div>
 
   <div class="mb-3">
-    <label for="email" class="form-label">E-posta Adresiniz</label>
-    <input type="email" class="form-control" id="email" name="email" placeholder="E-posta adresinizi yazın" required>
+    {{ form.email.label(class="form-label") }}
+    {{ form.email(class="form-control", placeholder="E-posta adresinizi yazın") }}
   </div>
 
   <div class="mb-3">
-    <label for="message" class="form-label">Mesajınız</label>
-    <textarea class="form-control" id="message" name="message" rows="5" placeholder="Mesajınızı yazın" required></textarea>
+    {{ form.message.label(class="form-label") }}
+    {{ form.message(class="form-control", rows="5", placeholder="Mesajınızı yazın") }}
   </div>
 
-  <button type="submit" class="btn btn-primary">Gönder</button>
+  {{ form.submit(class="btn btn-primary") }}
 </form>
 {% endblock %}

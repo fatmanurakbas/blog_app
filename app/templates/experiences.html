@@ -7,23 +7,31 @@
   <h2 class="mb-4 text-center">Deneyimlerim</h2>
   <div class="timeline">
     
+    {# Backend'den gelen 'experience_list' üzerinde döngü başlat #}
+    {% for exp in experience_list %}
     <div class="mb-4 p-4 border rounded bg-light">
-      <h5>Yazılım Geliştirici - TechSoft</h5>
-      <small class="text-muted">Ocak 2023 - Ağustos 2024</small>
-      <p class="mt-2">Web uygulamaları ve REST API geliştirme üzerine çalıştım. Flask, SQLAlchemy ve Bootstrap ile projeler yönettim.</p>
+      <h5>{{ exp.role }} - {{ exp.company }}</h5>
+      <small class="text-muted">
+        {# Başlangıç tarihini formatla #}
+        {{ exp.start_date.strftime('%B %Y') }} - 
+        
+        {# Eğer bitiş tarihi varsa, onu da formatla #}
+        {% if exp.end_date %}
+          {{ exp.end_date.strftime('%B %Y') }}
+        {# Eğer bitiş tarihi yoksa (NULL ise), "Halen" yaz #}
+        {% else %}
+          Halen
+        {% endif %}
+      </small>
+      <p class="mt-2">{{ exp.description }}</p>
     </div>
 
-    <div class="mb-4 p-4 border rounded bg-light">
-      <h5>Backend Developer - Kodla Bilişim</h5>
-      <small class="text-muted">Haziran 2021 - Aralık 2022</small>
-      <p class="mt-2">Veritabanı tasarımı ve Python/Flask tabanlı servislerin geliştirilmesinde aktif rol aldım.</p>
+    {# Eğer 'experience_list' boş ise bu mesajı göster #}
+    {% else %}
+    <div class="alert alert-info">
+      Henüz gösterilecek bir deneyim bulunmuyor.
     </div>
-
-    <div class="mb-4 p-4 border rounded bg-light">
-      <h5>Stajyer Yazılımcı - DijitalAkademi</h5>
-      <small class="text-muted">Temmuz 2020 - Eylül 2020</small>
-      <p class="mt-2">Web geliştirme temel konularında projeler yaparak frontend ve backend teknolojileri hakkında deneyim kazandım.</p>
-    </div>
+    {% endfor %}
 
   </div>
 </div>

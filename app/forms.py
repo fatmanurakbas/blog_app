@@ -1,6 +1,7 @@
-#forms.py
+# app/forms.py
+
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, SubmitField
+from wtforms import StringField, PasswordField, SubmitField,TextAreaField, SubmitField
 from wtforms.validators import DataRequired, Email, EqualTo, Length
 
 class RegistrationForm(FlaskForm):
@@ -17,3 +18,8 @@ class LoginForm(FlaskForm):
     submit = SubmitField('Giriş Yap')
 
 
+class ContactForm(FlaskForm):
+    name = StringField('Adınız Soyadınız', validators=[DataRequired()])
+    email = StringField('E-posta Adresiniz', validators=[DataRequired(), Email()])
+    message = TextAreaField('Mesajınız', validators=[DataRequired()])
+    submit = SubmitField('Gönder')
