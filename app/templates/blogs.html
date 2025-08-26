@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+
+{% block title %}Bloglarım - Portföy{% endblock %}
+
+{% block content %}
+<h2 class="mb-4">Blog Yazılarım</h2>
+
+<div class="list-group">
+  <!-- Örnek blog girdileri -->
+  <a href="#" class="list-group-item list-group-item-action flex-column align-items-start mb-3">
+    <div class="d-flex w-100 justify-content-between">
+      <h5 class="mb-1">Python ile Web Geliştirmeye Giriş</h5>
+      <small>15 Ağustos 2025</small>
+    </div>
+    <p class="mb-1">Python'un web geliştirme dünyasındaki yeri ve Flask ile hızlı proje geliştirme teknikleri.</p>
+    <small>Devamını oku...</small>
+  </a>
+
+  <a href="#" class="list-group-item list-group-item-action flex-column align-items-start mb-3">
+    <div class="d-flex w-100 justify-content-between">
+      <h5 class="mb-1">Veri Analizi İçin En İyi Kütüphaneler</h5>
+      <small>5 Temmuz 2025</small>
+    </div>
+    <p class="mb-1">Pandas, NumPy ve Matplotlib gibi popüler Python kütüphanelerinin karşılaştırması ve kullanımları.</p>
+    <small>Devamını oku...</small>
+  </a>
+
+  <a href="#" class="list-group-item list-group-item-action flex-column align-items-start mb-3">
+    <div class="d-flex w-100 justify-content-between">
+      <h5 class="mb-1">Kariyerimde Öğrendiğim 10 Önemli Ders</h5>
+      <small>20 Haziran 2025</small>
+    </div>
+    <p class="mb-1">Profesyonel hayatta başarı ve gelişim için öğrendiğim önemli pratik tavsiyeler.</p>
+    <small>Devamını oku...</small>
+  </a>
+</div>
+
+{% endblock %}

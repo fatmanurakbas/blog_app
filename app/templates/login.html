@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Giriş Yap</title>
+</head>
+<body>
+    <h1>Giriş Yap</h1>
+    <form method="POST" action="">
+        {{ form.hidden_tag() }}
+        <p>
+            {{ form.email.label }}<br>
+            {{ form.email(size=32) }}
+        </p>
+        <p>
+            {{ form.password.label }}<br>
+            {{ form.password(size=32) }}
+        </p>
+        <p>{{ form.submit() }} </p>
+    </form>
+    <p>Hesabınız yok mu? <a href="{{ url_for('main.register') }}">Kayıt Ol</a></p>
+</body>
+</html>

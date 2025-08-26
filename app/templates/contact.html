@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+
+{% block title %}İletişim - Portföy{% endblock %}
+
+{% block content %}
+<h2 class="mb-4">İletişim</h2>
+
+<p>Bana ulaşmak için aşağıdaki formu doldurabilirsiniz. En kısa sürede size geri döneceğim.</p>
+
+<form method="POST" action="/contact" class="mt-4">
+  <div class="mb-3">
+    <label for="name" class="form-label">Adınız Soyadınız</label>
+    <input type="text" class="form-control" id="name" name="name" placeholder="Adınızı yazın" required>
+  </div>
+
+  <div class="mb-3">
+    <label for="email" class="form-label">E-posta Adresiniz</label>
+    <input type="email" class="form-control" id="email" name="email" placeholder="E-posta adresinizi yazın" required>
+  </div>
+
+  <div class="mb-3">
+    <label for="message" class="form-label">Mesajınız</label>
+    <textarea class="form-control" id="message" name="message" rows="5" placeholder="Mesajınızı yazın" required></textarea>
+  </div>
+
+  <button type="submit" class="btn btn-primary">Gönder</button>
+</form>
+{% endblock %}

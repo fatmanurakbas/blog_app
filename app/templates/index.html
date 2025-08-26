@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+
+{% block title %}Anasayfa - Portföyüm{% endblock %}
+
+{% block content %}
+<div class="text-center py-5">
+  <h1 class="display-4">Portföyüme Hoşgeldiniz</h1>
+  <p class="lead">Web uygulamaları, backend sistemleri ve yapay zeka projeleri geliştirmeye tutkulu bir yazılım geliştiricisiyim.</p>
+  <a href="{{ url_for('projects') }}" class="btn btn-primary btn-lg mt-3">Projelerime Göz Atın</a>
+</div>
+{% endblock %}

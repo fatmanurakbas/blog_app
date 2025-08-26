@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+
+{% block title %}Hakkımda - Portföy{% endblock %}
+
+{% block content %}
+<div class="row align-items-center">
+  <div class="col-md-4 text-center">
+    <img src="{{ url_for('static', filename='images/fatmanur.jpg') }}" class="img-fluid rounded-circle shadow" alt="Profil Resmi" style="max-width: 250px;">
+  </div>
+  <div class="col-md-8">
+    <h2 class="mb-3">Hakkımda</h2>
+    <p class="lead">
+      Yazılım geliştirmeye tutkuyla bağlı, web uygulamaları, REST API'ler ve veri odaklı platformlar geliştirme konusunda deneyimli bir yazılımcıyım. Yeni teknolojiler öğrenmeyi ve gerçek dünya problemlerine çözümler üretmeyi seviyorum.
+    </p>
+    <p>
+      Ana teknolojilerim Python, Flask, SQL Server ve modern frontend araçlarından oluşmaktadır. Detaylara önem veren, ekip çalışmasına yatkın ve temiz, sürdürülebilir kod yazmayı hedefleyen biriyim.
+    </p>
+    <a href="/static/CV.pdf" class="btn btn-outline-primary mt-3" target="_blank">CV İndir</a>
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+
+{% block title %}Yeteneklerim - Benim Portföyüm{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+  <h2 class="mb-4 text-center">Yeteneklerim</h2>
+  <div class="row">
+    <div class="col-md-6 mb-3">
+      <div class="p-3 border rounded bg-light">
+        <strong>Python</strong>
+        <div class="progress mt-1">
+          <div class="progress-bar bg-success" style="width: 90%;">Uzman</div>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-6 mb-3">
+      <div class="p-3 border rounded bg-light">
+        <strong>Flask</strong>
+        <div class="progress mt-1">
+          <div class="progress-bar bg-info" style="width: 85%;">İleri</div>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-6 mb-3">
+      <div class="p-3 border rounded bg-light">
+        <strong>HTML / CSS / Bootstrap</strong>
+        <div class="progress mt-1">
+          <div class="progress-bar bg-warning" style="width: 80%;">İleri</div>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-6 mb-3">
+      <div class="p-3 border rounded bg-light">
+        <strong>SQL / PostgreSQL</strong>
+        <div class="progress mt-1">
+          <div class="progress-bar bg-danger" style="width: 75%;">Orta</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

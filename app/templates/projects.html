@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+
+{% block title %}Projelerim - Portföy{% endblock %}
+
+{% block content %}
+<h2 class="mb-4">Projelerim</h2>
+
+<div class="row">
+  <!-- Proje kartları -->
+  <div class="col-md-4 mb-4">
+    <div class="card h-100 shadow-sm">
+      <img src="{{ url_for('static', filename='images/Local.png') }}" class="card-img-top" alt="Proje 1">
+      <div class="card-body">
+        <h5 class="card-title">E-Ticaret Web Sitesi</h5>
+        <p class="card-text">Modern teknolojilerle geliştirilmiş, kullanıcı dostu ve güvenli bir e-ticaret platformu.</p>
+        <a href="https://example.com/e-ticaret" class="btn btn-primary" target="_blank">Detayları Gör</a>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-md-4 mb-4">
+    <div class="card h-100 shadow-sm">
+      <img src="{{ url_for('static', filename='images/Kombin.png') }}" class="card-img-top" alt="Proje 2">
+      <div class="card-body">
+        <h5 class="card-title">Blog Platformu</h5>
+        <p class="card-text">Kullanıcıların kolayca blog yazıları oluşturabildiği, kategorilendirme ve etiketleme özellikleri bulunan platform.</p>
+        <a href="https://example.com/blog-platformu" class="btn btn-primary" target="_blank">Detayları Gör</a>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-md-4 mb-4">
+    <div class="card h-100 shadow-sm">
+      <img src="{{ url_for('static', filename='images/FeelArt.png') }}" class="card-img-top" alt="Proje 3">
+      <div class="card-body">
+        <h5 class="card-title">Veri Analiz Aracı</h5>
+        <p class="card-text">Büyük veri setlerini analiz eden, raporlama ve görselleştirme imkanı sunan web tabanlı araç.</p>
+        <a href="https://example.com/veri-analiz" class="btn btn-primary" target="_blank">Detayları Gör</a>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
