@@ -5,21 +5,16 @@ from app import db
 from app.models import User, Hero, About, Projects, Blogs, Skills, Experiences, Reference, ContactMessage
 from app.forms import RegistrationForm, LoginForm, ContactForm
 from werkzeug.security import generate_password_hash, check_password_hash
-
-# 'main' adında bir Blueprint oluşturuyoruz
 main = Blueprint('main', __name__)
 
 
-# --- ANA PORTFOLYO ROUTE'U (TEK SAYFA İÇİN) ---
-# app/routes.py (index fonksiyonunun önerilen hali)
-
 @main.route('/')
 def index():
-    # Değişkenleri varsayılan 'boş' değerleriyle başlat
+
     hero_data = None
     about_data = None
     project_list = []
-    # ... diğer listeler için de []
+
 
     try:
         # Veritabanından verileri çek ve değişkenlerin üzerine yaz
@@ -52,16 +47,9 @@ def index():
 
 @main.route('/blog/<int:post_id>')
 def blog_post(post_id):
-    """
-    Bu route, URL'den aldığı ID'ye göre tek bir blog yazısını veritabanından çeker
-    ve bunu yeni bir şablon olan blog_detail.html'e gönderir.
-    """
-    # .get_or_404() metodu, belirtilen ID'de bir kayıt bulamazsa otomatik olarak 404 Not Found hatası verir.
-    # Bu, 'post = Blogs.query.get(post_id)' ve ardından 'if not post: abort(404)' yapmaktan daha temiz bir yoldur.
     post = Blogs.query.get_or_404(post_id)
-    
-    # Bulunan post nesnesini şablona gönderiyoruz.
     return render_template('blog_detail.html', post=post)
+
 # --- FORM İŞLEMLERİ İÇİN AYRI ROUTE'LAR ---
 
 @main.route("/submit_contact", methods=['POST'])
