@@ -1,112 +1,96 @@
 # app/routes.py
 
-from flask import Blueprint, render_template, redirect, url_for, flash, request, session
-# Formlarınız varsa bu import kalmalı, yoksa silebilirsiniz
-# from app.forms import RegistrationForm, LoginForm 
-
-# Projenizdeki tüm modelleri buradan import ediyoruz
-from app.models import User, Hero, About, Projects, Blogs, Experiences, Skills, Reference
-
-# __init__.py'den gelen db nesnesini import ediyoruz
+from flask import Blueprint, render_template, redirect, url_for, flash, session
 from app import db 
+from app.models import User, Hero, About, Projects, Blogs, Skills, Experiences, Reference, ContactMessage
+from app.forms import RegistrationForm, LoginForm, ContactForm
 from werkzeug.security import generate_password_hash, check_password_hash
-from app.forms import RegistrationForm, LoginForm, ContactForm 
 
 # 'main' adında bir Blueprint oluşturuyoruz
 main = Blueprint('main', __name__)
 
 
-# --- TÜM SAYFA ROUTE'LARI ARTIK BURADA ---
+# --- ANA PORTFOLYO ROUTE'U (TEK SAYFA İÇİN) ---
+# app/routes.py (index fonksiyonunun önerilen hali)
 
 @main.route('/')
 def index():
-    # Hero tablosundan ilk kaydı çekiyoruz
-    hero_data = Hero.query.first() 
-    # Veriyi şablona gönderiyoruz
-    return render_template('index.html', hero=hero_data)
+    # Değişkenleri varsayılan 'boş' değerleriyle başlat
+    hero_data = None
+    about_data = None
+    project_list = []
+    # ... diğer listeler için de []
 
-@main.route("/about")
-def about():
-    # About tablosundan ilk kaydı çekiyoruz.
-    about_data = About.query.first()
+    try:
+        # Veritabanından verileri çek ve değişkenlerin üzerine yaz
+        hero_data = Hero.query.first()
+        about_data = About.query.first()
+        project_list = Projects.query.order_by(Projects.id.desc()).all()
+        skill_list = Skills.query.all()
+        experience_list = Experiences.query.order_by(Experiences.start_date.desc()).all()
+        reference_list = Reference.query.all()
+        blog_list = Blogs.query.order_by(Blogs.published_date.desc()).limit(3).all()
+
+    except Exception as e:
+        # Eğer sorguda hata olursa sadece bir uyarı göster. 
+        # Değişkenler varsayılan boş değerlerinde kalacağı için sayfa çökmeyecek.
+        flash(f"Veritabanından bilgi alınırken bir sorun oluştu: {e}", "danger")
+
+    # Formu her zaman oluştur
+    contact_form = ContactForm()
+
+    # Tüm verileri (dolu veya boş) şablona gönder
+    return render_template('index.html', 
+                           hero=hero_data,
+                           about_info=about_data,
+                           project_list=project_list,
+                           skill_list=skill_list,
+                           experience_list=experience_list,
+                           reference_list=reference_list,
+                           blog_list=blog_list,
+                           form=contact_form)
+
+@main.route('/blog/<int:post_id>')
+def blog_post(post_id):
+    """
+    Bu route, URL'den aldığı ID'ye göre tek bir blog yazısını veritabanından çeker
+    ve bunu yeni bir şablon olan blog_detail.html'e gönderir.
+    """
+    # .get_or_404() metodu, belirtilen ID'de bir kayıt bulamazsa otomatik olarak 404 Not Found hatası verir.
+    # Bu, 'post = Blogs.query.get(post_id)' ve ardından 'if not post: abort(404)' yapmaktan daha temiz bir yoldur.
+    post = Blogs.query.get_or_404(post_id)
     
-    # Çektiğimiz veriyi 'about_info' adıyla şablona gönderiyoruz.
-    return render_template("about.html", about_info=about_data)
+    # Bulunan post nesnesini şablona gönderiyoruz.
+    return render_template('blog_detail.html', post=post)
+# --- FORM İŞLEMLERİ İÇİN AYRI ROUTE'LAR ---
 
-@main.route("/projects")
-def projects():
-    # Projects tablosundaki tüm kayıtları çekiyoruz.
-    all_projects = Projects.query.all()
-    
-    # Proje listesini 'project_list' adıyla şablona gönderiyoruz.
-    return render_template("projects.html", project_list=all_projects)
-
-@main.route("/blogs")
-def blogs():
-    # Blogs tablosundaki tüm kayıtları, yayınlanma tarihine göre azalan şekilde (en yeni en üstte) sıralayarak çekiyoruz.
-    all_posts = Blogs.query.order_by(Blogs.published_date.desc()).all()
-    
-    # Çektiğimiz yazı listesini 'blog_list' adıyla şablona gönderiyoruz.
-    return render_template("blogs.html", blog_list=all_posts)
-
-@main.route("/skills")
-def skills():
-    # Skills tablosundaki tüm yetenekleri çekiyoruz.
-    all_skills = Skills.query.all()
-    
-    # Yetenek listesini 'skill_list' adıyla şablona gönderiyoruz.
-    return render_template("skills.html", skill_list=all_skills)
-
-@main.route("/experiences")
-def experiences():
-    # Experiences tablosundaki tüm kayıtları başlangıç tarihine göre azalan şekilde (en yeni en üstte) sıralayarak çekiyoruz.
-    all_experiences = Experiences.query.order_by(Experiences.start_date.desc()).all()
-    
-    # Deneyim listesini 'experience_list' adıyla şablona gönderiyoruz.
-    return render_template("experiences.html", experience_list=all_experiences)
-
-
-@main.route("/references")
-def references():
-    # Reference tablosundaki tüm kayıtları çekiyoruz.
-    all_references = Reference.query.all()
-    
-    # Referans listesini 'reference_list' adıyla şablona gönderiyoruz.
-    return render_template("references.html", reference_list=all_references)
-
-
-# app/routes.py
-
-# ...diğer importlarınızın en üstüne formumuzu ve YENİ modelimizi ekleyin
-from app.forms import ContactForm 
-from app.models import ContactMessage # <-- BU SATIRI EKLEYİN
-
-# ...diğer route'larınız...
-
-@main.route("/contact", methods=['GET', 'POST'])
-def contact():
+@main.route("/submit_contact", methods=['POST'])
+def submit_contact():
+    """
+    Bu route SADECE iletişim formundan gelen POST isteğini işler.
+    """
     form = ContactForm()
     if form.validate_on_submit():
-        # Form gönderildiğinde ve geçerli olduğunda bu blok çalışır
-        
-        # YENİ KOD: Gelen veriyi bir model nesnesine aktar
+        # Veriyi veritabanına kaydet
         new_message = ContactMessage(
             name=form.name.data,
             email=form.email.data,
             message=form.message.data
         )
-        
-        # YENİ KOD: Veritabanına ekle ve kaydet
         db.session.add(new_message)
         db.session.commit()
-        
-        # Eski print() satırını silebilirsiniz.
-        
-        flash('Mesajınız gönderildi.', 'success')
-        return redirect(url_for('main.contact'))
-        
-    # Sayfa ilk yüklendiğinde (GET request) veya form geçersizse bu blok çalışır
-    return render_template("contact.html", form=form)
+        flash('Mesajınız başarıyla gönderildi. Teşekkürler!', 'success')
+    else:
+        # Form geçerli değilse, hataları flash mesajı olarak göster
+        for field, errors in form.errors.items():
+            for error in errors:
+                flash(f"{getattr(form, field).label.text}: {error}", 'danger')
+
+    # İşlem bittikten sonra kullanıcıyı anasayfanın iletişim bölümüne geri yönlendir
+    return redirect(url_for('main.index') + '#iletisim')
+
+
+# --- KULLANICI İŞLEMLERİ (AYNI KALABİLİR) ---
 
 @main.route('/register', methods=['GET', 'POST'])
 def register():
@@ -116,23 +100,21 @@ def register():
         new_user = User(username=form.username.data, email=form.email.data, password=hashed_password)
         db.session.add(new_user)
         db.session.commit()
-        flash('Kayıt başarılı!', 'success')
-        return redirect(url_for('main.index'))
+        flash('Kayıt başarılı! Lütfen giriş yapın.', 'success')
+        return redirect(url_for('main.login')) # Kayıttan sonra login'e yönlendirmek daha mantıklı
     return render_template('register.html', form=form)
 
 @main.route('/login', methods=['GET', 'POST'])
 def login():
     form = LoginForm()
     if form.validate_on_submit():
-        user = User.query.filter_by(email=form.email.data).first()
+        user = User.query.filter_by(username=form.username.data).first()
         if user and check_password_hash(user.password, form.password.data):
             session['user_id'] = user.id
             flash('Giriş başarılı!', 'success')
             return redirect(url_for('main.index'))
         else:
-            flash('Hatalı e-posta veya şifre!', 'danger')
-    elif request.method == 'POST':
-        flash(f'Form doğrulanamadı: {form.errors}', 'warning')
+            flash('Hatalı kullanıcı adı veya şifre!', 'danger')
     return render_template('login.html', form=form)
 
 @main.route('/logout')

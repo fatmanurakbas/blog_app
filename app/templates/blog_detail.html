@@ -1,0 +1,82 @@
+<!-- app/templates/blog_detail.html -->
+
+{% extends "base.html" %}
+
+{% block title %}{{ post.title }}{% endblock %}
+
+{% block content %}
+
+<style>
+  /* Sadece bu sayfa için geçerli stiller */
+  .blog-post-container {
+    padding: 80px 0;
+  }
+  .blog-post-header {
+    text-align: center;
+    margin-bottom: 40px;
+  }
+  .blog-post-header h1 {
+    font-size: 3rem;
+    font-weight: 700;
+  }
+  .blog-post-meta {
+    color: #6c757d;
+    font-size: 0.9rem;
+  }
+  .blog-post-image {
+    width: 100%;
+    height: 400px;
+    object-fit: cover;
+    border-radius: 8px;
+    margin-bottom: 40px;
+  }
+  .blog-post-content {
+    font-size: 1.1rem;
+    line-height: 1.8;
+  }
+  .blog-post-content img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 5px;
+  }
+</style>
+
+<div class="blog-post-container">
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-lg-8">
+
+        <!-- Blog Başlığı ve Meta Bilgileri -->
+        <div class="blog-post-header">
+          <h1>{{ post.title }}</h1>
+          <div class="blog-post-meta">
+            Yayınlanma Tarihi: {{ post.published_date.strftime('%d %B %Y') }}
+          </div>
+        </div>
+
+        <!-- Blog Kapak Görseli -->
+        <img src="{{ post.cover_image_url or url_for('static', filename='images/default-blog.jpg') }}" alt="{{ post.title }}" class="blog-post-image">
+
+        <!-- Blog İçeriği -->
+        <div class="blog-post-content">
+          {#
+            'safe' filtresi önemlidir. Bu filtre olmadan,
+            eğer içeriğinizde <b>, <p> gibi HTML etiketleri varsa,
+            bunlar ekranda metin olarak görünür. 'safe' filtresi
+            bu etiketlerin HTML olarak render edilmesini sağlar.
+            Sadece güvendiğiniz kaynaklardan (kendi admin paneliniz gibi)
+            gelen verilerle kullanın!
+          #}
+          {{ post.content | safe }}
+        </div>
+        
+        <hr class="my-5">
+        
+        <a href="{{ url_for('main.index') }}#blogs" class="btn btn-outline-secondary">&larr; Tüm Yazılara Geri Dön</a>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock %}

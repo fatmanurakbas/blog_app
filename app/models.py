@@ -53,6 +53,7 @@ class Projects(db.Model):
     description = db.Column(db.Text)
     image_url = db.Column(db.String(250))
     project_url = db.Column(db.String(250))
+    
 
     def __repr__(self):
         return f'<Project {self.title}>'

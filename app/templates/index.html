@@ -1,27 +1,161 @@
 {% extends "base.html" %}
 
-{% block title %}Anasayfa - Portföyüm{% endblock %}
+{% block title %}Anasayfa - Portfolyom{% endblock %}
 
 {% block content %}
-{# Backend'den 'hero' değişkeni gönderilmiş mi diye kontrol et #}
-{% if hero %}
-  {# Hero modelinde background_image_url alanı olduğu için onu da kullanalım #}
-  <div class="text-center py-5" style="background-image: url('{{ hero.background_image_url }}'); background-size: cover; background-position: center; border-radius: 10px; color: white; text-shadow: 2px 2px 4px #000000;">
-    
-    {# Veritabanından gelen başlığı yazdır #}
-    <h1 class="display-4">{{ hero.title }}</h1>
-    
-    {# Veritabanından gelen açıklamayı yazdır #}
-    <p class="lead">{{ hero.description }}</p>
-    
-    <a href="{{ url_for('main.projects') }}" class="btn btn-primary btn-lg mt-3">Projelerime Göz Atın</a>
-  </div>
-{% else %}
-  {# Eğer veritabanında hiç hero verisi yoksa bu varsayılan bölüm gösterilir #}
-  <div class="text-center py-5">
-    <h1 class="display-4">Portföyüme Hoşgeldiniz</h1>
-    <p class="lead">Web uygulamaları, backend sistemleri ve yapay zeka projeleri geliştirmeye tutkulu bir yazılım geliştiricisiyim.</p>
-    <a href="{{ url_for('main.projects') }}" class="btn btn-primary btn-lg mt-3">Projelerime Göz Atın</a>
-  </div>
+
+<!-- =======================
+ANASAYFA (HERO) BÖLÜMÜ
+======================== -->
+<section id="anasayfa">
+    <style>
+      /* Stil kodlarınız aynı kalabilir, burada bir değişiklik gerekmiyor */
+      .hero-section {
+        min-height: 100vh;
+        width: 100%;
+        position: relative;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        color: #fff;
+        background-image: url('https://images.pexels.com/photos/1779487/pexels-photo-1779487.jpeg'); 
+        background-size: cover;
+        background-position: center;
+        background-attachment: fixed;
+      }
+      .hero-section::before {
+        content: '';
+        position: absolute;
+        top: 0; left: 0;
+        width: 100%; height: 100%;
+        background-color: rgba(10, 25, 47, 0.6);
+        z-index: 1;
+      }
+      .hero-content {
+        position: relative;
+        z-index: 2;
+        max-width: 800px;
+        padding: 20px;
+      }
+      .hero-content h1 { font-size: 4.5rem; font-weight: 700; }
+      .hero-content p { font-size: 1.2rem; margin-top: 20px; margin-bottom: 30px; }
+      .hero-buttons .btn {
+        text-decoration: none;
+        color: #fff;
+        padding: 15px 35px;
+        border-radius: 50px;
+        font-size: 1rem;
+        font-weight: 600;
+        margin: 0 10px;
+        transition: all 0.3s ease;
+        border: 2px solid transparent;
+      }
+      .btn.btn-primary {
+        background-color: #C71585;
+        border-color: #C71585;
+      }
+      .btn.btn-primary:hover {
+        background-color: #a6126f;
+        border-color: #a6126f;
+        transform: translateY(-3px);
+      }
+      .btn.btn-secondary {
+        background-color: transparent;
+        border-color: #fff;
+      }
+      .btn.btn-secondary:hover {
+        background-color: #fff;
+        color: #333;
+        transform: translateY(-3px);
+      }
+    </style>
+
+    <div class="hero-section">
+      <main class="hero-content">
+          <!-- GÜNCELLEME: 'hero' verisi varsa göster, yoksa varsayılan başlıkları göster. -->
+          {% if hero %}
+              <h1>{{ hero.title }}</h1>
+              <p>{{ hero.description }}</p>
+          {% else %}
+              <h1>Portfolyo Sayfama Hoş Geldiniz</h1>
+              <p>Yönetim panelinden ana sayfa yazılarını ekleyebilirsiniz.</p>
+          {% endif %}
+        
+        <div class="hero-buttons">
+          <a href="#projects" class="btn btn-primary">Projelerim</a>
+          <a href="#contact" class="btn btn-secondary">İletişim</a>
+        </div>
+      </main>
+    </div>
+</section>
+
+<!-- =======================
+HAKKIMDA BÖLÜMÜ
+======================== -->
+<!-- GÜNCELLEME: Sadece 'about_info' verisi varsa bu bölümü sayfaya dahil et. -->
+{% if about_info %}
+<section id="about">
+    {% include 'about.html' %}
+</section>
 {% endif %}
+
+<!-- =======================
+YETENEKLER BÖLÜMÜ
+======================== -->
+<!-- GÜNCELLEME: Sadece 'skill_list' boş değilse bu bölümü dahil et. -->
+{% if skill_list %}
+<section id="skills">
+    {% include 'skills.html' %}
+</section>
+{% endif %}
+
+<!-- =======================
+PROJELER BÖLÜMÜ
+======================== -->
+<!-- GÜNCELLEME: Sadece 'project_list' boş değilse bu bölümü dahil et. -->
+{% if project_list %}
+<section id="projects">
+    {% include 'projects.html' %}
+</section>
+{% endif %}
+
+<!-- =======================
+BLOG BÖLÜMÜ
+======================== -->
+<!-- GÜNCELLEME: Sadece 'blog_list' boş değilse bu bölümü dahil et. -->
+{% if blog_list %}
+<section id="blogs">
+    {% include 'blogs.html' %}
+</section>
+{% endif %}
+
+<!-- =======================
+DENEYİMLER BÖLÜMÜ
+======================== -->
+<!-- GÜNCELLEME: Sadece 'experience_list' boş değilse bu bölümü dahil et. -->
+{% if experience_list %}
+<section id="experiences">
+    {% include 'experiences.html' %}
+</section>
+{% endif %}
+
+<!-- =======================
+REFERANSLAR BÖLÜMÜ
+======================== -->
+<!-- GÜNCELLEME: Sadece 'reference_list' boş değilse bu bölümü dahil et. -->
+{% if reference_list %}
+<section id="references">
+    {% include 'references.html' %}
+</section>
+{% endif %}
+    
+<!-- =======================
+İLETİŞİM BÖLÜMÜ
+======================== -->
+<!-- Bu bölüm form içerdiği için her zaman gösterilmelidir. -->
+<section id="contact">
+    {% include 'contact.html' %}
+</section>
+
 {% endblock %}

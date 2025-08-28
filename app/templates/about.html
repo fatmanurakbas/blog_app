@@ -1,45 +1,120 @@
-{% extends "base.html" %}
 
-{% block title %}Hakkımda - Portföy{% endblock %}
 
-{% block content %}
-<div class="row align-items-center">
+<style>
+  /* Sayfanın bu bölümü için özel stiller */
+  .about-section {
+    background-color: #fff; /* Arka planı beyaz yapalım, daha temiz durur */
+    padding: 80px 0;
+  }
 
-  {# Backend'den 'about_info' verisi gönderilmiş mi diye kontrol et #}
-  {% if about_info %}
-    <div class="col-md-4 text-center">
-      {# Profil resmini veritabanından gelen URL ile değiştir #}
-      <img src="{{ about_info.profile_image_url }}" class="img-fluid rounded-circle shadow" alt="Profil Resmi" style="max-width: 250px;">
-    </div>
-    <div class="col-md-8">
-      <h2 class="mb-3">Hakkımda</h2>
-      {# 
-        Biyografi metnini veritabanından gelen 'bio' kolonu ile değiştir.
-        '| safe' filtresi, veritabanına <p> veya <br> gibi HTML etiketleri eklerseniz,
-        bunların tarayıcıda düzgün bir şekilde görüntülenmesini sağlar.
-      #}
-      <div class="lead">
-        {{ about_info.bio}}
+  .about-text-content {
+    padding-right: 3rem; 
+  }
+
+  /* Başlığın üzerindeki dekoratif çizgi */
+  .title-decorator {
+    display: block;
+    width: 50px;
+    height: 3px;
+    background-color: #C71585; /* Ana renk paletinize uygun koyu pembe */
+    margin-bottom: 20px;
+  }
+
+  .about-text-content h2 {
+    font-weight: 700;
+    font-size: 2.5rem;
+    margin-bottom: 20px;
+  }
+
+  .about-text-content .lead,
+  .about-text-content p {
+    color: #555; 
+    line-height: 1.7; 
+  }
+  
+  .about-text-content .btn-primary {
+    background-color: #C71585;
+    border-color: #C71585;
+    border-radius: 50px;
+    padding: 10px 25px;
+  }
+  
+  .about-text-content .btn-primary:hover {
+    background-color: #a6126f;
+    border-color: #a6126f;
+  }
+
+  .about-image-col img {
+    width: 100%;
+    height: 60vh; 
+    object-fit: cover; 
+    border-radius: 8px; 
+  }
+
+  /* Mobil cihazlar için düzenleme */
+  @media (max-width: 991px) {
+    .about-text-content {
+      padding-right: 0;
+      margin-bottom: 40px;
+      text-align: center;
+    }
+    .title-decorator {
+        margin-left: auto;
+        margin-right: auto;
+    }
+    .about-image-col {
+      text-align: center;
+    }
+    .about-image-col img {
+      height: auto; 
+      max-width: 100%;
+    }
+  }
+</style>
+
+<div class="about-section">
+  <div class="container">
+    <div class="row align-items-center">
+
+      <!-- Metin Sütunu -->
+      <div class="col-lg-6">
+        <div class="about-text-content">
+          <span class="title-decorator"></span>
+          <h2>Hakkımda</h2>
+
+          {# Backend'den veri geliyorsa bu bloğu göster #}
+          {% if about_info %}
+            <div class="lead">
+              {{ about_info.bio | safe }}
+            </div>
+            <!-- Not: CV linkini de veritabanından dinamik alabilirsiniz -->
+            <a href="/static/images/CV.pdf" class="btn btn-primary mt-4" target="_blank">CV Görüntüle</a>
+          
+          {# Veri yoksa varsayılan metni göster #}
+          {% else %}
+            <p class="lead">
+              Yazılım geliştirmeye tutkuyla bağlı, web uygulamaları, REST API'ler ve veri odaklı platformlar geliştirme konusunda deneyimli bir yazılımcıyım. Yeni teknolojiler öğrenmeyi ve gerçek dünya problemlerine çözümler üretmeyi seviyorum.
+            </p>
+            <p>
+              Ana teknolojilerim Python, Flask, SQL Server ve modern frontend araçlarından oluşmaktadır. Detaylara önem veren, ekip çalışmasına yatkın ve temiz, sürdürülebilir kod yazmayı hedefleyen biriyim.
+            </p>
+            <a href="/static/CV.pdf" class="btn btn-primary mt-4" target="_blank">CV Görüntüle</a>
+          {% endif %}
+        </div>
       </div>
-      <a href="/static/CV.pdf" class="btn btn-outline-primary mt-3" target="_blank">CV İndir</a>
-    </div>
 
-  {# Eğer veritabanında hiç 'about' verisi yoksa, bu varsayılan (statik) içerik gösterilir #}
-  {% else %}
-    <div class="col-md-4 text-center">
-      <img src="{{ url_for('static', filename='images/fatmanur.jpg') }}" class="img-fluid rounded-circle shadow" alt="Profil Resmi" style="max-width: 250px;">
-    </div>
-    <div class="col-md-8">
-      <h2 class="mb-3">Hakkımda</h2>
-      <p class="lead">
-        Yazılım geliştirmeye tutkuyla bağlı, web uygulamaları, REST API'ler ve veri odaklı platformlar geliştirme konusunda deneyimli bir yazılımcıyım. Yeni teknolojiler öğrenmeyi ve gerçek dünya problemlerine çözümler üretmeyi seviyorum.
-      </p>
-      <p>
-        Ana teknolojilerim Python, Flask, SQL Server ve modern frontend araçlarından oluşmaktadır. Detaylara önem veren, ekip çalışmasına yatkın ve temiz, sürdürülebilir kod yazmayı hedefleyen biriyim.
-      </p>
-      <a href="/static/CV.pdf" class="btn btn-outline-primary mt-3" target="_blank">CV İndir</a>
-    </div>
-  {% endif %}
+      <!-- Resim Sütunu -->
+      <div class="col-lg-6 about-image-col">
+        {# Backend'den veri geliyorsa bu resmi kullan #}
+        {% if about_info and about_info.profile_image_url %}
+          <img src="{{ about_info.profile_image_url }}" alt="Hakkımda Görseli">
+        
+        {# Veri yoksa veya resim URL'si boşsa varsayılan resmi kullan #}
+        {% else %}
+          <img src="https://images.pexels.com/photos/3184418/pexels-photo-3184418.jpeg" alt="Ekip Çalışması">
+        {% endif %}
+      </div>
 
+    </div>
+  </div>
 </div>
-{% endblock %}

@@ -1,33 +1,161 @@
-{% extends "base.html" %}
 
-{% block title %}İletişim - Portföy{% endblock %}
+<style>
+  .contact-section-v2 {
+    padding: 60px 0;
+    background-color: #f4f7f6;
+    min-height: 90vh;
+    display: flex;
+    align-items: center;
+  }
 
-{% block content %}
-<h2 class="mb-4">İletişim</h2>
+  .contact-container-v2 {
+    display: grid;
+    grid-template-columns: 1fr 1.5fr; /* Sol sütun daha dar, sağ daha geniş */
+    max-width: 1100px;
+    margin: auto;
+    background: #fff;
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.15);
+    border-radius: 15px;
+  }
 
-<p>Bana ulaşmak için aşağıdaki formu doldurabilirsiniz. En kısa sürede size geri döneceğim.</p>
+  /* Sol Taraf: Geometrik Bilgi Paneli */
+  .contact-info-v2 {
+    background: linear-gradient(160deg, #8A2BE2 0%, #4A00E0 100%);
+    color: #fff;
+    padding: 40px;
+    border-radius: 15px 0 0 15px;
+    position: relative;
+    /* Geometrik kesim efekti */
+    clip-path: polygon(0 0, 100% 0, 85% 100%, 0% 100%);
+  }
 
-<!-- action'ı boş bırakabiliriz, aynı sayfaya post eder -->
-<form method="POST" action="" class="mt-4">
-  
-  <!-- Bu satır CSRF koruması için ZORUNLUDUR -->
-  {{ form.hidden_tag() }}
+  .contact-info-v2 h3 {
+    font-weight: 700;
+    margin-bottom: 20px;
+  }
+  .contact-info-v2 .info-list { list-style: none; padding: 0; }
+  .contact-info-v2 .info-list li { display: flex; align-items: center; margin-bottom: 25px; }
+  .contact-info-v2 .info-list i { font-size: 1.2rem; margin-right: 20px; }
+  .contact-info-v2 a { color: #fff; text-decoration: none; opacity: 0.9; transition: opacity 0.3s; }
+  .contact-info-v2 a:hover { opacity: 1; }
 
-  <div class="mb-3">
-    {{ form.name.label(class="form-label") }}
-    {{ form.name(class="form-control", placeholder="Adınızı yazın") }}
+  /* Sağ Taraf: Form Paneli */
+  .contact-form-v2 {
+    background: #fff;
+    padding: 40px;
+    padding-left: 60px; /* Panelin taşmasından dolayı ekstra boşluk */
+    border-radius: 0 15px 15px 0;
+    /* Katmanlı görünüm için sihirli dokunuş */
+    margin-left: -60px;
+    z-index: 2;
+    position: relative;
+  }
+  .contact-form-v2 h3 { color: #333; font-weight: 700; margin-bottom: 30px; }
+
+  /* İkonlu Form Alanları */
+  .form-group-v2 { position: relative; margin-bottom: 25px; }
+  .form-group-v2 .form-control {
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 12px 15px 12px 45px; /* İkona yer açmak için sol padding */
+    transition: all 0.3s ease;
+  }
+  .form-group-v2 .form-control:focus {
+    box-shadow: 0 0 0 2px rgba(74, 0, 224, 0.2);
+    border-color: #8A2BE2;
+  }
+  .form-group-v2 i {
+    position: absolute;
+    left: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #aaa;
+    transition: color 0.3s ease;
+  }
+  .form-group-v2 .form-control:focus + i { color: #8A2BE2; }
+
+  /* Gradient Buton */
+  .btn-gradient {
+    background: linear-gradient(90deg, #8A2BE2 0%, #4A00E0 100%);
+    color: #fff;
+    border: none;
+    padding: 12px 35px;
+    border-radius: 50px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+  }
+  .btn-gradient:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 10px 20px rgba(74, 0, 224, 0.3);
+  }
+
+  /* Mobil Uyumlu Hali */
+  @media (max-width: 991px) {
+    .contact-container-v2 {
+      grid-template-columns: 1fr; /* Tek sütuna düşür */
+    }
+    .contact-info-v2 {
+      clip-path: none; /* Geometrik kesimi kaldır */
+      border-radius: 15px 15px 0 0;
+      text-align: center;
+    }
+    .contact-form-v2 {
+      margin-left: 0;
+      border-radius: 0 0 15px 15px;
+      padding: 40px;
+    }
+    .contact-info-v2 .info-list {
+      justify-content: center;
+      flex-direction: column;
+    }
+  }
+</style>
+
+<div class="contact-section-v2">
+  <div class="container">
+    <div class="contact-container-v2">
+
+      <!-- Sol Panel: İletişim Bilgileri (Geometrik Şekil) -->
+      <div class="contact-info-v2">
+        <h3>İletişime Geçin</h3>
+        <p>Projeler, iş birlikleri veya sadece bir kahve içmek için... Fikirlerinizi duymayı çok isterim.</p>
+        <ul class="info-list mt-5">
+          <li>
+            <i class="fas fa-envelope"></i>
+            <a href="mailto:mail@ornek.com">fna@ornek.com</a>
+          </li>
+          <li>
+            <i class="fab fa-linkedin"></i>
+            <a href="https://www.linkedin.com/in/fatmanurakbas16/">fatmanurakbas16</a>
+          </li>
+          <li>
+            <i class="fas fa-map-marker-alt"></i>
+            <span>İstanbul, Türkiye</span>
+          </li>
+        </ul>
+      </div>
+
+      <!-- Sağ Panel: İletişim Formu (Taşan Kart) -->
+      <div class="contact-form-v2">
+        <h3 class="mb-4">Bana Bir Not Bırakın</h3>
+        <form method="POST" action="">
+          {{ form.hidden_tag() }}
+          <div class="form-group-v2">
+            {{ form.name(class="form-control", placeholder="Adınız") }}
+            <i class="fas fa-user"></i>
+          </div>
+          <div class="form-group-v2">
+            {{ form.email(class="form-control", placeholder="E-posta Adresiniz") }}
+            <i class="fas fa-envelope"></i>
+          </div>
+          <div class="form-group-v2">
+            {{ form.message(class="form-control", rows="5", placeholder="Mesajınız") }}
+            <i class="fas fa-comment-dots" style="top: 20px; transform: none;"></i>
+          </div>
+          {{ form.submit(class="btn btn-gradient") }}
+        </form>
+      </div>
+
+    </div>
   </div>
-
-  <div class="mb-3">
-    {{ form.email.label(class="form-label") }}
-    {{ form.email(class="form-control", placeholder="E-posta adresinizi yazın") }}
-  </div>
-
-  <div class="mb-3">
-    {{ form.message.label(class="form-label") }}
-    {{ form.message(class="form-control", rows="5", placeholder="Mesajınızı yazın") }}
-  </div>
-
-  {{ form.submit(class="btn btn-primary") }}
-</form>
-{% endblock %}
+</div>

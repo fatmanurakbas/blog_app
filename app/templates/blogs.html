@@ -1,37 +1,166 @@
-{% extends "base.html" %}
+<!-- app/templates/blogs.html -->
 
-{% block title %}Bloglarım - Portföy{% endblock %}
+<style>
+  /* --- CSS DEĞİŞKENLERİ --- */
+  :root {
+    --primary-color: #C71585; /* Sitenizin ana rengi (Koyu Pembe/Mor) */
+  }
 
-{% block content %}
-<h2 class="mb-4">Blog Yazılarım</h2>
+  /* --- BLOG BÖLÜMÜ GENEL STİLLERİ --- */
+  .blog-section {
+    padding: 80px 0;
+    background-color: #f8f9fa;
+  }
 
-<div class="list-group">
+  .section-header {
+    text-align: center;
+    margin-bottom: 60px;
+  }
+  .section-header h2 {
+    font-size: 2.8rem;
+    font-weight: 700;
+  }
+  .section-header p {
+    font-size: 1.1rem;
+    color: #6c757d;
+    max-width: 600px;
+    margin: 0 auto;
+  }
+
+  /* --- YENİLENMİŞ BLOG KARTI STİLLERİ --- */
+  .blog-card {
+    background-color: #fff;
+    border: none;
+    border-radius: 10px;
+    box-shadow: 0 5px 25px rgba(0, 0, 0, 0.08);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    height: 100%;
+  }
+  .blog-card:hover {
+    transform: translateY(-7px);
+    box-shadow: 0 12px 35px rgba(0, 0, 0, 0.12);
+  }
+
+  /* YENİ: Resim için bir sarmalayıcı (zoom efekti için) */
+  .card-img-container {
+    position: relative;
+    overflow: hidden; /* Dışarı taşan resmi gizle */
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+  }
   
-  {# Backend'den gelen 'blog_list' listesi üzerinde döngü başlat #}
-  {# Her bir öğeye 'post' adını veriyoruz #}
-  {% for post in blog_list %}
-    {# TODO: Gelecekte burası blog detay sayfasına gidecek -> url_for('main.blog_detail', post_id=post.id) #}
-    <a href="#" class="list-group-item list-group-item-action flex-column align-items-start mb-3">
-      <div class="d-flex w-100 justify-content-between">
-        <h5 class="mb-1">{{ post.title }}</h5>
-        
-        {# Tarihi daha okunabilir bir formatta yazdırıyoruz (Örn: 15 Ağustos 2025) #}
-        <small>{{ post.published_date.strftime('%d %B %Y') }}</small>
-      </div>
-      
-      {# İçeriğin sadece ilk 150 karakterini gösteriyoruz #}
-      <p class="mb-1">{{ post.content | truncate(150) }}</p>
-      
-      <small>Devamını oku...</small>
-    </a>
+  .blog-card .card-img-top {
+    height: 200px;
+    object-fit: cover;
+    transition: transform 0.4s ease; /* Zoom efekti için geçiş */
+  }
   
-  {# Eğer 'blog_list' boş ise (hiç blog yazısı yoksa) bu mesajı göster #}
-  {% else %}
-    <div class="alert alert-info">
-      Henüz yayınlanmış bir blog yazısı bulunmuyor.
+  /* YENİ: Hover durumunda resim büyüsün */
+  .blog-card:hover .card-img-top {
+    transform: scale(1.1);
+  }
+  
+  /* YENİ: Resmin üzerine gelen tarih rozeti */
+  .card-date-badge {
+    position: absolute;
+    top: 15px;
+    left: 15px;
+    background-color: var(--primary-color);
+    color: #fff;
+    padding: 5px 12px;
+    border-radius: 50px;
+    font-size: 0.8rem;
+    font-weight: 500;
+    z-index: 2;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+  }
+  
+  .blog-card .card-body {
+    padding: 25px;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .blog-card .card-title a {
+    font-size: 1.3rem;
+    font-weight: 600;
+    color: #343a40;
+    text-decoration: none;
+    transition: color 0.3s ease;
+  }
+
+  .blog-card .card-title a:hover {
+    color: var(--primary-color);
+  }
+
+  .blog-card .card-text {
+    color: #6c757d;
+    flex-grow: 1;
+    margin-top: 10px;
+  }
+  
+  /* "Devamını Oku" butonu renklendi */
+  .blog-card .btn-link {
+    color: var(--primary-color);
+    font-weight: 600;
+    text-decoration: none;
+    padding-left: 0;
+    transition: letter-spacing 0.3s ease;
+  }
+
+  .blog-card .btn-link:hover {
+    letter-spacing: 0.5px; /* Hafif harf aralığı efekti */
+  }
+</style>
+
+<div class="blog-section">
+  <div class="container">
+
+    <!-- Bölüm Başlığı -->
+    <div class="section-header">
+      <h2>Blog</h2>
+      <p>Fikirlerimi, deneyimlerimi ve teknik notlarımı paylaştığım kişisel günlüğüm.</p>
     </div>
-  {% endfor %}
-  
-</div>
 
-{% endblock %}
+    <div class="row">
+      
+      {# Backend'den gelen 'blog_list' listesi üzerinde döngü başlat #}
+      {% for post in blog_list %}
+      <div class="col-lg-4 col-md-6 mb-4 d-flex align-items-stretch">
+        <div class="blog-card w-100">
+          
+          <!-- YENİ: RESİM İÇİN SARMALAYICI VE TARİH ROZETİ -->
+          <div class="card-img-container">
+            <img src="{{ post.cover_image_url or url_for('static', filename='images/default-blog.jpg') }}" class="card-img-top" alt="{{ post.title }}">
+            <div class="card-date-badge">
+              <span>{{ post.published_date.strftime('%d %B %Y') }}</span>
+            </div>
+          </div>
+          
+          <div class="card-body">
+            <!-- YENİ: Başlığı da tıklanabilir yaptık -->
+            <h5 class="card-title">
+              <a href="{{ url_for('main.blog_post', post_id=post.id) }}">{{ post.title }}</a>
+            </h5>
+            <p class="card-text">
+              {# İçeriğin ilk 120 karakterini gösteriyoruz #}
+              {{ post.content | striptags | truncate(120, true) }}
+            </p>
+            
+            <a href="{{ url_for('main.blog_post', post_id=post.id) }}" class="btn btn-link mt-auto">Devamını Oku &rarr;</a>
+          </div>
+        </div>
+      </div>
+
+      {# Eğer 'blog_list' boş ise bu mesajı göster #}
+      {% else %}
+      <div class="col-12">
+        <div class="alert alert-info">
+          Henüz yayınlanmış bir blog yazısı bulunmuyor.
+        </div>
+      </div>
+      {% endfor %}
+      
+    </div>
+  </div>
+</div>

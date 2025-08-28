@@ -11,12 +11,11 @@ class RegistrationForm(FlaskForm):
     confirm_password = PasswordField('Şifre Tekrar', validators=[DataRequired(), EqualTo('password')])
     submit = SubmitField('Kayıt Ol')
 
-
 class LoginForm(FlaskForm):
-    email = StringField('Email', validators=[DataRequired(), Email()])
+    # BU SATIRI KONTROL EDİN. 'email' DEĞİL 'username' OLMALI.
+    username = StringField('Kullanıcı Adı', validators=[DataRequired()]) 
     password = PasswordField('Şifre', validators=[DataRequired()])
     submit = SubmitField('Giriş Yap')
-
 
 class ContactForm(FlaskForm):
     name = StringField('Adınız Soyadınız', validators=[DataRequired()])
