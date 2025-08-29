@@ -138,7 +138,7 @@
       <!-- Sağ Panel: İletişim Formu (Taşan Kart) -->
       <div class="contact-form-v2">
         <h3 class="mb-4">Bana Bir Not Bırakın</h3>
-        <form method="POST" action="">
+        <form method="POST" action="{{ url_for('main.submit_contact') }}">
           {{ form.hidden_tag() }}
           <div class="form-group-v2">
             {{ form.name(class="form-control", placeholder="Adınız") }}

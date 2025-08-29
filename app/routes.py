@@ -8,8 +8,10 @@ from werkzeug.security import generate_password_hash, check_password_hash
 main = Blueprint('main', __name__)
 
 
-@main.route('/')
-def index():
+# DEĞİŞİKLİK 1: index fonksiyonunun adını ve route'unu değiştiriyoruz.
+# Artık burası, kullanıcı giriş yaptıktan sonra göreceği ana sayfa olacak.
+@main.route('/home')  # URL'yi '/home' olarak güncelledik.
+def home():           # Fonksiyon adını 'home' olarak değiştirdik.
 
     hero_data = None
     about_data = None
@@ -74,8 +76,8 @@ def submit_contact():
             for error in errors:
                 flash(f"{getattr(form, field).label.text}: {error}", 'danger')
 
-    # İşlem bittikten sonra kullanıcıyı anasayfanın iletişim bölümüne geri yönlendir
-    return redirect(url_for('main.index') + '#iletisim')
+    # DEĞİŞİKLİK 2: Artık 'index'e değil, 'home' sayfasına yönlendiriyoruz.
+    return redirect(url_for('main.home') + '#iletisim')
 
 
 # --- KULLANICI İŞLEMLERİ (AYNI KALABİLİR) ---
@@ -89,10 +91,12 @@ def register():
         db.session.add(new_user)
         db.session.commit()
         flash('Kayıt başarılı! Lütfen giriş yapın.', 'success')
-        return redirect(url_for('main.login')) # Kayıttan sonra login'e yönlendirmek daha mantıklı
+        return redirect(url_for('main.login')) 
     return render_template('register.html', form=form)
 
-@main.route('/login', methods=['GET', 'POST'])
+# DEĞİŞİKLİK 3: login fonksiyonunu uygulamanın ana girişi ('/') yapıyoruz.
+@main.route('/', methods=['GET', 'POST'])       # Ana URL'yi buraya ekledik.
+@main.route('/login', methods=['GET', 'POST'])  # Eski '/login' URL'si de çalışmaya devam edebilir.
 def login():
     form = LoginForm()
     if form.validate_on_submit():
@@ -100,7 +104,8 @@ def login():
         if user and check_password_hash(user.password, form.password.data):
             session['user_id'] = user.id
             flash('Giriş başarılı!', 'success')
-            return redirect(url_for('main.index'))
+            # DEĞİŞİKLİK 4: Başarılı girişten sonra 'index' yerine 'home'a yönlendiriyoruz.
+            return redirect(url_for('main.home'))
         else:
             flash('Hatalı kullanıcı adı veya şifre!', 'danger')
     return render_template('login.html', form=form)
@@ -109,4 +114,5 @@ def login():
 def logout():
     session.pop('user_id', None)
     flash('Başarıyla çıkış yapıldı.', 'success')
-    return redirect(url_for('main.index'))
+    # DEĞİŞİKLİK 5: Çıkış yapınca artık 'index'e değil, 'login' sayfasına yönlendiriyoruz.
+    return redirect(url_for('main.login'))
